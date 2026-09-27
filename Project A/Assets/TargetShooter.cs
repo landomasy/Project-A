@@ -1,16 +1,31 @@
 using UnityEngine;
 
-public class TargetShooter : MonoBehaviour
+public class ShootingController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Camera playerCamera;      // drag your PlayerCamera in
+    public float range = 100f;
+    public LayerMask targetMask;     // which layers count as "hittable"
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0)) // left-click
+        {
+            Shoot();
+        }
+    }
+
+    void Shoot()
+    {
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)); // center of screen
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, range, targetMask))
+        {
+            Target target = hit.collider.GetComponent<Target>();
+            if (target != null)
+            {
+                target.OnHit();
+            }
+        }
     }
 }

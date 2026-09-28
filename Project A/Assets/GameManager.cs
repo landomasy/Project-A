@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timerText;
+
+    public GameObject gameOverPanel;
+    public TextMeshProUGUI finalScoreText;
 
     void Awake()
     {
@@ -58,5 +62,27 @@ public class GameManager : MonoBehaviour
     {
         gameActive = false;
         Debug.Log("Game Over! Final Score: " + score);
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
+
+        if (finalScoreText != null)
+        {
+            finalScoreText.text = "Final Score: " + score;
+        }
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f; // in case it was paused
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu"); // must match your Main Menu scene's exact name
     }
 }
